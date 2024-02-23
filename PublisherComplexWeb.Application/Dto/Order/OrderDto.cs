@@ -6,6 +6,7 @@ namespace PublisherComplexWeb.Application.Dto.Order
     {
         public int Id { get; set; }
         public long UserId { get; set; }
+        public string UserFio { get; set; }
         public string ShortDescription { get; set; }
         public string? DetailedDescription { get; set; }
         public DateTime CreatedAt { get; set; }
