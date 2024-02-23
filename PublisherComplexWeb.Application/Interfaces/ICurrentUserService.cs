@@ -2,6 +2,6 @@
 {
     public interface ICurrentUserService
     {
-        long UserId { get; set; }
+        long UserId { get; }
     }
 }
