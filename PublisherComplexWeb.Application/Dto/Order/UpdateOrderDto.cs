@@ -1,6 +1,4 @@
-﻿using PublisherComplexWeb.Application.Dto.Work;
-
-namespace PublisherComplexWeb.Application.Dto.Order
+﻿namespace PublisherComplexWeb.Application.Dto.Order
 {
     public class UpdateOrderDto
     {

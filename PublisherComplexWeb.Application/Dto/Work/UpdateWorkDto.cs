@@ -1,6 +1,4 @@
-﻿using PublisherComplexWeb.Domain.Enums;
-
-namespace PublisherComplexWeb.Application.Dto.Work
+﻿namespace PublisherComplexWeb.Application.Dto.Work
 {
     public class UpdateWorkDto
     {
