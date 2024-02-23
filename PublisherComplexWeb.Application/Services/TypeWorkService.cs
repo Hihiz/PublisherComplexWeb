@@ -13,9 +13,9 @@ namespace PublisherComplexWeb.Application.Services
     {
         private readonly IBaseRepository<TypeWork> _repository;
         private readonly IMapper _mapper;
-        private readonly IValidator<TypeWork> _validator;
+        private readonly IValidatorDto<TypeWork> _validator;
 
-        public TypeWorkService(IBaseRepository<TypeWork> repository, IMapper mapper, IValidator<TypeWork> validator) =>
+        public TypeWorkService(IBaseRepository<TypeWork> repository, IMapper mapper, IValidatorDto<TypeWork> validator) =>
            (_repository, _mapper, _validator) = (repository, mapper, validator);
 
         public async Task<IBaseStatus<List<TypeWorkDto>>> GetAll()

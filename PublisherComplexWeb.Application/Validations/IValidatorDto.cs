@@ -2,7 +2,7 @@
 
 namespace PublisherComplexWeb.Application.Validations
 {
-    public interface IValidator<T>
+    public interface IValidatorDto<T>
     {
         Task<IBaseStatus> Validate(T entity);
     }

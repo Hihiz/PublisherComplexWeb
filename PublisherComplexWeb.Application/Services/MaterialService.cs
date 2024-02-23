@@ -13,9 +13,9 @@ namespace PublisherComplexWeb.Application.Services
     {
         private readonly IBaseRepository<Material> _repository;
         private readonly IMapper _mapper;
-        private readonly IValidator<Material> _validator;
+        private readonly IValidatorDto<Material> _validator;
 
-        public MaterialService(IBaseRepository<Material> repository, IMapper mapper, IValidator<Material> validator) =>
+        public MaterialService(IBaseRepository<Material> repository, IMapper mapper, IValidatorDto<Material> validator) =>
             (_repository, _mapper, _validator) = (repository, mapper, validator);
 
         public async Task<IBaseStatus<List<MaterialDto>>> GetAll()

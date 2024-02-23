@@ -14,9 +14,9 @@ namespace PublisherComplexWeb.Application.Services
     {
         private readonly IBaseRepository<Device> _repository;
         private readonly IMapper _mapper;
-        private readonly IValidator<Device> _validator;
+        private readonly IValidatorDto<Device> _validator;
 
-        public DeviceService(IBaseRepository<Device> repository, IMapper mapper, IValidator<Device> validator) =>
+        public DeviceService(IBaseRepository<Device> repository, IMapper mapper, IValidatorDto<Device> validator) =>
             (_repository, _mapper, _validator) = (repository, mapper, validator);
 
         public async Task<IBaseStatus<List<DeviceDto>>> GetAll()

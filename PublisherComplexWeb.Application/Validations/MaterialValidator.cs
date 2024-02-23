@@ -5,7 +5,7 @@ using PublisherComplexWeb.Domain.Enums;
 
 namespace PublisherComplexWeb.Application.Validations
 {
-    public class MaterialValidator : IValidator<Material>
+    public class MaterialValidator : IValidatorDto<Material>
     {
         private readonly IBaseRepository<Material> _repository;
 

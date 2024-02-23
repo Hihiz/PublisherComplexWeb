@@ -5,7 +5,7 @@ using PublisherComplexWeb.Domain.Enums;
 
 namespace PublisherComplexWeb.Application.Validations
 {
-    public class TypeWorkValidator : IValidator<TypeWork>
+    public class TypeWorkValidator : IValidatorDto<TypeWork>
     {
         private readonly IBaseRepository<TypeWork> _repository;
 

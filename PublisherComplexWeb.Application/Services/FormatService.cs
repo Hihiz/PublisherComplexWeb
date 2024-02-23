@@ -13,9 +13,9 @@ namespace PublisherComplexWeb.Application.Services
     {
         private readonly IBaseRepository<Format> _repository;
         private readonly IMapper _mapper;
-        private readonly IValidator<Format> _validator;
+        private readonly IValidatorDto<Format> _validator;
 
-        public FormatService(IBaseRepository<Format> repository, IMapper mapper, IValidator<Format> validator) =>
+        public FormatService(IBaseRepository<Format> repository, IMapper mapper, IValidatorDto<Format> validator) =>
             (_repository, _mapper, _validator) = (repository, mapper, validator);
 
         public async Task<IBaseStatus<List<FormatDto>>> GetAll()

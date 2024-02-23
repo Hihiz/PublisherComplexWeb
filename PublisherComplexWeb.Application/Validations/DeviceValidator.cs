@@ -5,7 +5,7 @@ using PublisherComplexWeb.Domain.Enums;
 
 namespace PublisherComplexWeb.Application.Validations
 {
-    public class DeviceValidator : IValidator<Device>
+    public class DeviceValidator : IValidatorDto<Device>
     {
         private readonly IBaseRepository<Device> _repository;
 
