@@ -15,8 +15,10 @@ namespace PublisherComplexWeb.Domain.Entities
         public int MaterialId { get; set; }
         public Material Material { get; set; }
 
-        public string DoublePrint { get; set; }
         public int FormatId { get; set; }
+        public Format Format { get; set; }
+
+        public string DoublePrint { get; set; }
         public int? Quantity { get; set; }
         public Status StatusWork { get; set; }
     }
