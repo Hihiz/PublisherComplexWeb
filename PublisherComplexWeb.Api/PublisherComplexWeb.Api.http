@@ -1,0 +1,6 @@
+@PublisherComplexWeb.Api_HostAddress = http://localhost:5229
+
+GET {{PublisherComplexWeb.Api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
