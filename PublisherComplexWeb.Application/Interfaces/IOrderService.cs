@@ -10,6 +10,6 @@ namespace PublisherComplexWeb.Application.Interfaces
         Task<IBaseStatus<OrderDto>> UpdateOrder(int id, UpdateOrderDto dto);
         Task<IBaseStatus<List<OrderDto>>> GetOrdersClose();
         Task<IBaseStatus<List<OrderDto>>> GetOrdersOpen();
-        Task DeleteOrder(int id);
+        Task<IBaseStatus> DeleteOrder(int id);
     }
 }
