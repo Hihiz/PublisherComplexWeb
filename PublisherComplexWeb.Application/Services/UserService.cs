@@ -17,7 +17,7 @@ namespace PublisherComplexWeb.Application.Services
 
             foreach (OrderDto order in orderDto)
             {
-                if (userNameDictionary.TryGetValue(order.Id, out string userName))
+                if (userNameDictionary.TryGetValue(order.UserId, out string userName))
                 {
                     order.UserFio = userName;
                 }
@@ -31,7 +31,7 @@ namespace PublisherComplexWeb.Application.Services
             Dictionary<long, string> userNameDictionary = (await _userAuthService.GetAuthUsers())
                  .ToDictionary(u => u.Id, u => u.Fio);
 
-            if (userNameDictionary.TryGetValue(orderDto.Id, out string userName))
+            if (userNameDictionary.TryGetValue(orderDto.UserId, out string userName))
             {
                 orderDto.UserFio = userName;
             }

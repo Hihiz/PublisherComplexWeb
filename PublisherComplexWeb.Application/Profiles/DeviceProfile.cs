@@ -8,9 +8,9 @@ namespace PublisherComplexWeb.Application.Profiles
     {
         public DeviceProfile()
         {
-            CreateMap<Device, DeviceDto>();
-            CreateMap<Device, CreateDeviceDto>();
-            CreateMap<Device, UpdateDeviceDto>();
+            CreateMap<Device, DeviceDto>().ReverseMap();
+            CreateMap<Device, CreateDeviceDto>().ReverseMap();
+            CreateMap<Device, UpdateDeviceDto>().ReverseMap();
         }
     }
 }

@@ -136,8 +136,8 @@ namespace PublisherComplexWeb.Application.Services
                 {
                     return new StatusResponseError<TypeWorkDto>
                     {
-                        StatusCode = (int)ErrorCode.OK,
-                        Message = ErrorCode.OK.ToString()
+                        StatusCode = (int)ErrorCode.NotFound,
+                        Message = ErrorCode.NotFound.ToString()
                     };
                 }
 

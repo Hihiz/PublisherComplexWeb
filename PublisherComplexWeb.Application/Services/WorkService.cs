@@ -184,9 +184,9 @@ namespace PublisherComplexWeb.Application.Services
         {
             try
             {
-                Work work = await _repository.GetById(id);
+                Work work = await  _repository.GetById(id);
 
-                if (work != null)
+                if (work == null)
                 {
                     throw new NotFoundException(nameof(Work), id);
                 }
