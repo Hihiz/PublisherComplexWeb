@@ -19,7 +19,7 @@
         public string FormatTitle { get; set; }
 
         public string DoublePrint { get; set; }
-        public int? Quantity { get; set; }
+        public int Quantity { get; set; }
         public string StatusWork { get; set; }
     }
 }
