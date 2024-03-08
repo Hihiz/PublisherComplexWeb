@@ -1,4 +1,5 @@
 ﻿using FluentValidation.Results;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PublisherComplexWeb.Application.Dto.Material;
 using PublisherComplexWeb.Application.Interfaces;
@@ -19,7 +20,9 @@ namespace PublisherComplexWeb.Api.Controllers
 
         [HttpGet("{id}")]
         public async Task<ActionResult> GetMaterial(int id) => Ok(await _materialService.GetById(id));
-       
+
+        //[Authorize(Roles = "Member, Admin")]
+        [Authorize]
         [HttpPost]
         public async Task<ActionResult> CreateMaterial(CreateMaterialDto dto)
         {
@@ -35,6 +38,8 @@ namespace PublisherComplexWeb.Api.Controllers
             return Ok(await _materialService.CreateMaterial(dto));
         }
 
+        //[Authorize(Roles = "Member, Admin")]
+        [Authorize]
         [HttpPut("{id}")]
         public async Task<ActionResult> UpdateMaterial(int id, UpdateMaterialDto dto)
         {
@@ -50,6 +55,8 @@ namespace PublisherComplexWeb.Api.Controllers
             return Ok(await _materialService.UpdateMaterial(id, dto));
         }
 
+        //[Authorize(Roles = "Admin")]
+        [Authorize]
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteMaterial(int id)
         {

@@ -1,4 +1,5 @@
 ﻿using FluentValidation.Results;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PublisherComplexWeb.Application.Dto.TypeWork;
 using PublisherComplexWeb.Application.Interfaces;
@@ -20,6 +21,8 @@ namespace PublisherComplexWeb.Api.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult> GetTypeWork(int id) => Ok(await _typeWorkService.GetById(id));
 
+        //[Authorize(Roles = "Member, Admin")]
+        [Authorize]
         [HttpPost]
         public async Task<ActionResult> CreateTypeWork(CreateTypeWorkDto dto)
         {
@@ -35,6 +38,8 @@ namespace PublisherComplexWeb.Api.Controllers
             return Ok(await _typeWorkService.CreateTypeWork(dto));
         }
 
+        //[Authorize(Roles = "Member, Admin")]
+        [Authorize]
         [HttpPut("{id}")]
         public async Task<ActionResult> UpdateTypeWork(int id, UpdateTypeWorkDto dto)
         {
@@ -50,6 +55,8 @@ namespace PublisherComplexWeb.Api.Controllers
             return Ok(await _typeWorkService.UpdateTypeWork(id, dto));
         }
 
+        //[Authorize(Roles = "Admin")]
+        [Authorize]
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteTypeWork(int id)
         {

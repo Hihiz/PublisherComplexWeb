@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using PublisherComplexWeb.Application.Dto.Order;
 using PublisherComplexWeb.Application.Interfaces;
 using PublisherComplexWeb.Application.Validations.FluentValidations.Order;
@@ -27,6 +28,8 @@ namespace PublisherComplexWeb.Api.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult> GetOrder(int id) => Ok(await _orderService.GetById(id));
 
+        //[Authorize(Roles = "Member, Admin")]
+        [Authorize]
         [HttpPost]
         public async Task<ActionResult> CreateOrder(CreateOrderDto dto)
         {
@@ -42,6 +45,8 @@ namespace PublisherComplexWeb.Api.Controllers
             return Ok(await _orderService.CreateOrder(dto));
         }
 
+        //[Authorize(Roles = "Member, Admin")]
+        [Authorize]
         [HttpPut("{id}")]
         public async Task<ActionResult> UpdateOrder(int id, UpdateOrderDto dto)
         {
@@ -57,6 +62,8 @@ namespace PublisherComplexWeb.Api.Controllers
             return Ok(await _orderService.UpdateOrder(id, dto));
         }
 
+        //[Authorize(Roles = "Admin")]
+        [Authorize]
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteOrder(int id) => Ok(await _orderService.DeleteOrder(id));
     }
