@@ -1,4 +1,5 @@
 ﻿using FluentValidation.Results;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PublisherComplexWeb.Application.Dto.Device;
 using PublisherComplexWeb.Application.Interfaces;
@@ -20,6 +21,8 @@ namespace PublisherComplexWeb.Api.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult> GetDevice(int id) => Ok(await _deviceService.GetById(id));
 
+        //[Authorize(Roles = "Member, Admin")]
+        [Authorize]
         [HttpPost]
         public async Task<ActionResult> CreateDevice(CreateDeviceDto dto)
         {
@@ -35,6 +38,8 @@ namespace PublisherComplexWeb.Api.Controllers
             return Ok(await _deviceService.CreateDevice(dto));
         }
 
+        //[Authorize(Roles = "Member, Admin")]
+        [Authorize]
         [HttpPut("{id}")]
         public async Task<ActionResult> UpdateDevice(int id, UpdateDeviceDto dto)
         {
@@ -52,6 +57,8 @@ namespace PublisherComplexWeb.Api.Controllers
             return Ok(await _deviceService.UpdateDevice(id, dto));
         }
 
+        //[Authorize(Roles = "Admin")]
+        [Authorize]
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteDevice(int id)
         {

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using PublisherComplexWeb.Application.Dto.Format;
 using PublisherComplexWeb.Application.Interfaces;
 using PublisherComplexWeb.Application.Validations.FluentValidations.Format;
@@ -21,6 +22,8 @@ namespace PublisherComplexWeb.Api.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult> GetFormat(int id) => Ok(await _formatService.GetById(id));
 
+        //[Authorize(Roles = "Member, Admin")]
+        [Authorize]
         [HttpPost]
         public async Task<ActionResult> CreateFormat(CreateFormatDto dto)
         {
@@ -36,6 +39,8 @@ namespace PublisherComplexWeb.Api.Controllers
             return Ok(await _formatService.CreateFormat(dto));
         }
 
+        //[Authorize(Roles = "Member, Admin")]
+        [Authorize]
         [HttpPut("{id}")]
         public async Task<ActionResult> UpdateFormat(int id, UpdateFormatDto dto)
         {
@@ -51,6 +56,8 @@ namespace PublisherComplexWeb.Api.Controllers
             return Ok(await _formatService.UpdateFormat(id, dto));
         }
 
+        //[Authorize(Roles = "Admin")]
+        [Authorize]
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteFormat(int id)
         {

@@ -1,4 +1,5 @@
 ﻿using FluentValidation.Results;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PublisherComplexWeb.Application.Dto.Work;
 using PublisherComplexWeb.Application.Interfaces;
@@ -23,6 +24,8 @@ namespace PublisherComplexWeb.Api.Controllers
         [HttpGet("{orderId}")]
         public async Task<ActionResult> GetWorksOrder(int orderId) => Ok(await _workService.GetByWorksOrder(orderId));
 
+        //[Authorize(Roles = "Member, Admin")]
+        [Authorize]
         [HttpPost]
         public async Task<ActionResult> CreateWork(CreateWorkDto dto)
         {
@@ -38,6 +41,8 @@ namespace PublisherComplexWeb.Api.Controllers
             return Ok(await _workService.CreateWork(dto));
         }
 
+        //[Authorize(Roles = "Member, Admin")]
+        [Authorize]
         [HttpPut("{id}")]
         public async Task<ActionResult> UpdateWork(int id, UpdateWorkDto dto)
         {
@@ -53,7 +58,9 @@ namespace PublisherComplexWeb.Api.Controllers
             return Ok(await _workService.UpdateWork(id, dto));
         }
 
-        [HttpDelete]
+        //[Authorize(Roles = "Admin")]
+        [Authorize]
+        [HttpDelete("{id}")]
         public async Task<ActionResult> WorkDelete(int id)
         {
             await _workService.DeleteWork(id);
