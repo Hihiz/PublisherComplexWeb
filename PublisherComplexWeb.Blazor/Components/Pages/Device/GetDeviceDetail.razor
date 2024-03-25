@@ -1,0 +1,53 @@
+﻿@page "/GetDeviceDetail/{Id}"
+
+@attribute [StreamRendering]
+@rendermode RenderMode.InteractiveServer
+
+@inject IHttpClientFactory clientFactory
+
+<PageTitle>DeviceDetail</PageTitle>
+
+<h2>Детали устройства</h2>
+
+<table class="table table-sm table-striped table-bordered m-2">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Title</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>@device.Id</td>
+            <td>@device.Title</td>
+        </tr>
+    </tbody>
+</table>
+
+@code {
+    private HttpClient httpClient = null;
+
+    private Device device = new Device();
+
+    [Parameter]
+    public string Id { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        httpClient = clientFactory.CreateClient();
+        httpClient.BaseAddress = new Uri("https://localhost:7101/api/device");
+
+        await GetDetails(int.Parse(Id));
+    }
+
+    private async Task GetDetails(int id)
+    {
+        HttpResponseMessage response = await httpClient.GetAsync($"{httpClient.BaseAddress}/{id}");
+        string apiResponse = await response.Content.ReadAsStringAsync();
+
+        JObject json = JObject.Parse(apiResponse);
+        JToken data = json["data"];
+
+        device = data.ToObject<Device>();
+    }
+}
