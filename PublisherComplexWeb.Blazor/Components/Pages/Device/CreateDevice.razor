@@ -1,27 +1,26 @@
-﻿@page "/GetDeviceDetail/{Id}"
+﻿@page "/CreateDevice"
 
 @attribute [StreamRendering]
 @rendermode RenderMode.InteractiveServer
 
 @inject IHttpClientFactory clientFactory
+@inject NavigationManager navigationManager
 
-<PageTitle>DeviceDetail</PageTitle>
+<PageTitle>Create Device</PageTitle>
 
-<h2>Детали устройства</h2>
+<h2>Создание устройства</h2>
+ 
+<table>
+    <div class="form-group">
+        <p>
+            <label class="control-label">Title</label>
+            <input class="form-control" @bind-value="device.Title" />
+        </p>
 
-<table class="table table-sm table-striped table-bordered m-2">
-    <thead>
-        <tr>
-            <th>Id</th>
-            <th>Title</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td>@device.Id</td>
-            <td>@device.Title</td>
-        </tr>
-    </tbody>
+        <p>
+            <button class="btn btn-success" @onclick="Submit">Сохранить</button>
+        </p>
+    </div>
 </table>
 
 @code {
@@ -36,18 +35,18 @@
     {
         httpClient = clientFactory.CreateClient();
         httpClient.BaseAddress = new Uri("https://localhost:7101/api/device");
-
-        await GetDetails(int.Parse(Id));
     }
 
-    private async Task GetDetails(int id)
+    private async Task Submit()
     {
-        HttpResponseMessage response = await httpClient.GetAsync($"{httpClient.BaseAddress}/{id}");
+        HttpResponseMessage response = await httpClient.PostAsJsonAsync($"{httpClient.BaseAddress}", device);
         string apiResponse = await response.Content.ReadAsStringAsync();
 
         JObject json = JObject.Parse(apiResponse);
         JToken data = json["data"];
 
         device = data.ToObject<Device>();
+
+        navigationManager.NavigateTo("GetDevices");
     }
 }
