@@ -1,0 +1,52 @@
+﻿@page "/CreateFormat"
+
+@attribute [StreamRendering]
+@rendermode RenderMode.InteractiveServer
+
+@inject IHttpClientFactory clientFactory
+@inject NavigationManager navigationManager
+
+<PageTitle>Create Format</PageTitle>
+
+<h2>Создание формата</h2>
+
+<table>
+    <div class="form-group">
+        <p>
+            <label class="control-label">Title</label>
+            <input class="form-control" @bind-value="format.Title" />
+        </p>
+
+        <p>
+            <button class="btn btn-success" @onclick="Submit">Сохранить</button>
+        </p>
+    </div>
+</table>
+
+@code {
+    private HttpClient httpClient = null;
+
+    private Format format = new Format();
+
+    [Parameter]
+    public string Id { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        httpClient = clientFactory.CreateClient();
+        httpClient.BaseAddress = new Uri("https://localhost:7101/api/format");
+    }
+
+    private async Task Submit()
+    {
+        HttpResponseMessage response = await httpClient.PostAsJsonAsync($"{httpClient.BaseAddress}", format);
+        string apiResponse = await response.Content.ReadAsStringAsync();
+
+        JObject json = JObject.Parse(apiResponse);
+        JToken data = json["data"];
+
+        format = data.ToObject<Format>();
+
+        navigationManager.NavigateTo("GetFormats");
+    }
+}
