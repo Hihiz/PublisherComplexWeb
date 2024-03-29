@@ -1,0 +1,57 @@
+﻿@page "/GetMaterialDetail/{Id}"
+
+@attribute [StreamRendering]
+@rendermode RenderMode.InteractiveServer
+
+@inject IHttpClientFactory clientFactory
+
+<PageTitle>DeviceDetail</PageTitle>
+
+<h2>Детали устройства</h2>
+
+<table class="table table-sm table-striped table-bordered m-2">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Title</th>
+            <th>Device Id</th>
+            <th>Device Title</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>@material.Id</td>
+            <td>@material.Title</td>
+            <td>@material.DeviceId</td>
+            <td>@material.DeviceTitle</td>
+        </tr>
+    </tbody>
+</table>
+
+@code {
+    private HttpClient httpClient = null;
+
+    private Material material = new Material();
+
+    [Parameter]
+    public string Id { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        httpClient = clientFactory.CreateClient();
+        httpClient.BaseAddress = new Uri("https://localhost:7101/api/material");
+
+        await GetMaterial(int.Parse(Id));
+    }
+
+    private async Task GetMaterial(int id)
+    {
+        HttpResponseMessage response = await httpClient.GetAsync($"{httpClient.BaseAddress}/{id}");
+        string apiResponse = await response.Content.ReadAsStringAsync();
+
+        JObject json = JObject.Parse(apiResponse);
+        JToken data = json["data"];
+
+        material = data.ToObject<Material>();
+    }
+}
