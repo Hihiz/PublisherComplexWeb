@@ -23,53 +23,51 @@ else
         </p>
     </div>
 
-        <table class="table table-sm table-striped table-bordered m-2">
+    <table class="table table-sm table-striped table-bordered m-2">
 
-            <thead>
+        <thead>
+            <tr>
+                <th class="all" style="width: 20px;">
+                    <div class="form-check">
+                        <input type="checkbox" class="form-check-input" id="customCheck1">
+                        <label class="form-check-label" for="customCheck1">&nbsp;</label>
+                    </div>
+                </th>
+                <th>Id</th>
+                <th>Title</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+
+            @foreach (var item in devices)
+            {
                 <tr>
-                    <th class="all" style="width: 20px;">
+                    <td>
                         <div class="form-check">
-                            <input type="checkbox" class="form-check-input" id="customCheck1">
-                            <label class="form-check-label" for="customCheck1">&nbsp;</label>
+                            <input type="checkbox" class="form-check-input" id="customcheck2">
+                            <label class="form-check-label" for="customcheck2">&nbsp;</label>
                         </div>
-                    </th>
-                    <th>Id</th>
-                    <th>Title</th>
-                    <th>Action</th>
+                    </td>
+
+                    <td>
+                        <NavLink href="@($"GetDeviceDetail/{item.Id}")">@item.Id</NavLink>
+                    </td>
+
+                    <td>@item.Title</td>
+
+                    <NavLink href="@($"UpdateDevice/{item.Id}")">Изменить</NavLink>
+                    <button @onclick="@(async ()=> await Delete(item.Id))">Удалить</button>
                 </tr>
-            </thead>
-            <tbody>
-
-                @foreach (var item in devices)
-                {
-                    <tr>
-                        <td>
-                            <div class="form-check">
-                                <input type="checkbox" class="form-check-input" id="customcheck2">
-                                <label class="form-check-label" for="customcheck2">&nbsp;</label>
-                            </div>
-                        </td>
-
-                        <td>
-                            <NavLink href="@($"GetDeviceDetail/{item.Id}")">@item.Id</NavLink>
-                        </td>
-
-                        <td>@item.Title</td>
-
-                        <NavLink href="@($"UpdateDevice/{item.Id}")">Изменить</NavLink>
-                        @* <button @onclick="()=>Edit(item)">Изменить</button> *@
-                        <button @onclick="@(async ()=> await Delete(item.Id))">Удалить</button>
-                    </tr>
-                }
-            </tbody>
-        </table>
+            }
+        </tbody>
+    </table>
 }
 
 @code {
     private HttpClient httpClient = null;
 
     private List<Device> devices = new List<Device>();
-    private Device device = new Device();
 
     protected override async Task OnInitializedAsync()
     {
@@ -79,7 +77,7 @@ else
         await Get();
     }
 
-    private async Task/* <List<Device>> */ Get()
+    private async Task Get()
     {
         HttpResponseMessage response = await httpClient.GetAsync($"{httpClient.BaseAddress}");
         string apiResponse = await response.Content.ReadAsStringAsync();
@@ -88,14 +86,6 @@ else
         JToken data = json["data"];
 
         devices = data.ToObject<List<Device>>();
-
-        // return devices;
-    }
-
-    private async Task Edit(Device d)
-    {
-        // device.Id = d.Id;
-        // device.Title = d.Title;
     }
 
     private async Task Delete(int id)
