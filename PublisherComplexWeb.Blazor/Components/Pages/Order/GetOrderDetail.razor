@@ -1,0 +1,144 @@
+﻿@page "/GetOrderDetail/{Id}"
+
+<PageTitle>OrderDetail</PageTitle>
+
+@attribute [StreamRendering]
+@rendermode RenderMode.InteractiveServer
+
+@inject IHttpClientFactory clientFactory
+@inject NavigationManager navigationManager
+
+<h2>Детали заказа</h2>
+
+<table class="table table-sm table-striped table-bordered m-2">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>UserId</th>
+            <th>FIO</th>
+            <th>ShortDescription</th>
+            <th>DetailedDescription</th>
+            <th>CreatedAt</th>
+            <th>DateEnd</th>
+            <th>StatusOrder</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>@orderViewModel.Order.Id</td>
+            <td>@orderViewModel.Order.UserId</td>
+            <td>@orderViewModel.Order.UserFio</td>
+            <td>@orderViewModel.Order.ShortDescription</td>
+            <td>@orderViewModel.Order.DetailedDescription</td>
+            <td>@orderViewModel.Order.CreatedAt</td>
+            <td>@orderViewModel.Order.DateEnd</td>
+            <td>@orderViewModel.Order.StatusOrder</td>
+
+            <NavLink href="@($"UpdateOrder/{Id}")">Изменить</NavLink>
+            <button @onclick="@(async ()=> await DeleteOrder(int.Parse(Id)))">Удалить</button>
+        </tr>
+    </tbody>
+</table>
+
+<h1>Работы к заказу</h1>
+<h3>Количество работ у заказа: @orderViewModel.Work.Count</h3>
+
+@if (orderViewModel.Work != null)
+{
+    <table class="table table-sm table-striped table-bordered m-2">
+        <thead>
+            <tr>
+                <th>Work Id</th>
+                <th>OrderId</th>
+                <th>TypeWorkTitle</th>
+                <th>MaterialTitle</th>
+                <th>DeviceTitle</th>
+                <th>DoublePrint</th>
+                <th>FormatTitle</th>
+                <th>Quantity</th>
+                <th>StatusWork</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in orderViewModel.Work)
+            {
+                <tr>
+                    <td>
+                        <NavLink href="@($"GetWorkDetail/{item.Id}")">@item.Id</NavLink>
+                    </td>
+
+                    <td>@item.OrderId</td>
+                    <td>@item.TypeWorkTitle</td>
+                    <td>@item.MaterialTitle</td>
+                    <td>@item.DeviceTitle</td>
+                    <td>@item.DoublePrint</td>
+                    <td>@item.FormatTitle</td>
+                    <td>@item.Quantity</td>
+                    <td>@item.StatusWork</td>
+
+                    <NavLink href="@($"UpdateWork/{item.Id}")">Изменить</NavLink>
+                    <button @onclick="@(async ()=> await DeleteWork(item.Id))">Удалить</button>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private HttpClient httpClient = null;
+
+    private OrderDetailViewModel orderViewModel = new OrderDetailViewModel();
+
+    [Parameter]
+    public string Id { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        httpClient = clientFactory.CreateClient();
+        httpClient.BaseAddress = new Uri("https://localhost:7101/api/order");
+
+        await GetDetail();
+        await GetWorksOrder();
+    }
+
+    private async Task GetDetail()
+    {
+        HttpResponseMessage response = await httpClient.GetAsync($"{httpClient.BaseAddress}/{Id}");
+        string apiResponse = await response.Content.ReadAsStringAsync();
+
+        JObject json = JObject.Parse(apiResponse);
+        JToken data = json["data"];
+
+        orderViewModel.Order = data.ToObject<Order>();
+    }
+
+    private async Task GetWorksOrder()
+    {
+        HttpResponseMessage response = await httpClient.GetAsync($"https://localhost:7101/api/work/{Id}");
+        string apiResponse = await response.Content.ReadAsStringAsync();
+
+        JObject json = JObject.Parse(apiResponse);
+        JToken data = json["data"];
+
+        if (data != null)
+        {
+            orderViewModel.Work = data.ToObject<List<Work>>();
+        }
+    }
+
+    private async Task DeleteWork(int id)
+    {
+        HttpResponseMessage response = await httpClient.DeleteAsync($"https://localhost:7101/api/work/{id}");
+
+        navigationManager.NavigateTo("GetOrders");
+    }
+
+    private async Task DeleteOrder(int workId)
+    {
+        HttpResponseMessage response = await httpClient.DeleteAsync($"{httpClient.BaseAddress}/{workId}");
+
+        navigationManager.NavigateTo("GetOrders");
+    }
+}
