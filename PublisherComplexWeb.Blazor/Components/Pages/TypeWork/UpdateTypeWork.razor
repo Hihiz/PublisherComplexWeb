@@ -1,0 +1,72 @@
+﻿@page "/UpdateTypeWork/{Id}"
+
+@attribute [StreamRendering]
+@rendermode RenderMode.InteractiveServer
+
+@inject IHttpClientFactory clientFactory
+@inject NavigationManager navigationManager
+
+<PageTitle>Update TypeWork</PageTitle>
+
+<h2>Редактирование тип работы</h2>
+
+<table>
+    <div class="form-group">
+        <p>
+            <label class="control-label">Id</label>
+            <input class="form-control" readonly="readonly" @bind-value="typeWork.Id" />
+        </p>
+        <p>
+            <label class="control-label">Title</label>
+            <input class="form-control" @bind-value="typeWork.Title" />
+        </p>
+
+        <p>
+            <button class="btn btn-success" @onclick="Submit">Сохранить</button>
+        </p>
+    </div>
+</table>
+
+@code {
+    private HttpClient httpClient = null;
+
+    private TypeWork typeWork = new TypeWork();
+
+    [Parameter]
+    public string Id { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        httpClient = clientFactory.CreateClient();
+        httpClient.BaseAddress = new Uri("https://localhost:7101/api/typework");
+
+        await GetTypeWorkDetail(int.Parse(Id));
+    }
+
+    private async Task GetTypeWorkDetail(int id)
+    {
+        HttpResponseMessage response = await httpClient.GetAsync($"{httpClient.BaseAddress}/{id}");
+        string apiResponse = await response.Content.ReadAsStringAsync();
+
+        JObject json = JObject.Parse(apiResponse);
+        JToken data = json["data"];
+
+        if (data != null)
+        {
+            typeWork = data.ToObject<TypeWork>();
+        }
+    }
+
+    private async Task Submit()
+    {
+        HttpResponseMessage response = await httpClient.PutAsJsonAsync($"{httpClient.BaseAddress}/{typeWork.Id}", typeWork);
+        string apiResponse = await response.Content.ReadAsStringAsync();
+
+        JObject json = JObject.Parse(apiResponse);
+        JToken data = json["data"];
+
+        typeWork = data.ToObject<TypeWork>();
+
+        navigationManager.NavigateTo("GetTypeWorks");
+    }
+}
