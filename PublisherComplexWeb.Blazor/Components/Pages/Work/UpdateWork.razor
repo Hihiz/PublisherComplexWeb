@@ -1,0 +1,176 @@
+﻿@page "/UpdateWork/{Id}"
+
+@attribute [StreamRendering]
+@rendermode RenderMode.InteractiveServer
+
+@inject IHttpClientFactory clientFactory
+@inject NavigationManager navigationManager
+
+<PageTitle>Update Work</PageTitle>
+
+<h2>Редактирование работы</h2>
+
+<table>
+    <div class="form-group">
+        <p hidden="hidden">
+            <label class="control-label">Id</label>
+            <input class="form-control" @bind-value="work.OrderId">
+        </p>
+        <p>
+            <label class="control-label">OrderId</label>
+            <input class="form-control" @bind-value="work.OrderId">
+        </p>
+        <p>
+            <label class="control-label">TypeWork Id</label>
+
+            <select class="form-control" @bind="@selectedTypeWork">
+                @foreach (var typeWork in typeWorks)
+                {
+                    <option value="@typeWork.Id">@typeWork.Title</option>
+                }
+            </select>
+        </p>
+        <p>
+            <label class="control-label">Material Id</label>
+
+            <select class="form-control" @bind="@selectedMaterial">
+                @foreach (var material in materials)
+                {
+                    <option value="@material.Id">@material.Title</option>
+                }
+            </select>
+        </p>
+
+        <p>
+            <label class="control-label">Format Id</label>
+
+            <select class="form-control" @bind="@selectedFormat">
+                @foreach (var format in formats)
+                {
+                    <option value="@format.Id">@format.Title</option>
+                }
+            </select>
+        </p>
+        <p>
+            <label class="control-label">DoublePrint</label>
+            <select class="form-control" @bind="work.DoublePrint">
+                <option value="Да">Да</option>
+                <option value="Нет">Нет</option>
+            </select>
+        </p>
+        <p>
+            <label class="control-label">Quantity</label>
+            <input class="form-control" @bind-value="work.Quantity">
+        </p>
+        <p>
+            <label class="control-label">StatusWork</label>
+            <select class="form-control" @bind="work.StatusWork">
+                <option value="1">Открыт</option>
+                <option value="2">Закрыт</option>
+            </select>
+        </p>
+
+        <p>
+            <button class="btn btn-success" @onclick="Submit">Сохранить</button>
+        </p>
+    </div>
+</table>
+
+@code {
+    private HttpClient httpClient = null;
+
+    private int selectedTypeWork = 1;
+    private int selectedMaterial = 1;
+    private int selectedFormat = 1;
+
+    private List<TypeWork> typeWorks = new List<TypeWork>();
+    private List<Material> materials = new List<Material>();
+    private List<Format> formats = new List<Format>();
+
+    private Work work = new Work();
+
+    [Parameter]
+    public string Id { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        httpClient = clientFactory.CreateClient();
+        httpClient.BaseAddress = new Uri("https://localhost:7101/api/work");
+
+        await LoadTypeWorks();
+        await LoadMaterials();
+        await LoadFormats();
+
+        await GetWorkDetail(int.Parse(Id));
+    }
+
+    private async Task GetWorkDetail(int id)
+    {
+        HttpResponseMessage response = await httpClient.GetAsync($"{httpClient.BaseAddress}/workDetail/{id}");
+        string apiResponse = await response.Content.ReadAsStringAsync();
+
+        JObject json = JObject.Parse(apiResponse);
+        JToken data = json["data"];
+
+        if (data != null)
+        {
+            work = data.ToObject<Work>();
+
+            selectedTypeWork = work.TypeWorkId;
+            selectedMaterial = work.MaterialId;
+            selectedFormat = work.FormatId;
+
+            // selectedStatusWork = work.StatusWork;
+        }
+    }
+
+    private async Task LoadTypeWorks()
+    {
+        HttpResponseMessage response = await httpClient.GetAsync($"https://localhost:7101/api/typework");
+        string apiResponse = await response.Content.ReadAsStringAsync();
+
+        JObject json = JObject.Parse(apiResponse);
+        JToken data = json["data"];
+
+        typeWorks = data.ToObject<List<TypeWork>>();
+    }
+
+    private async Task LoadMaterials()
+    {
+        HttpResponseMessage response = await httpClient.GetAsync($"https://localhost:7101/api/material");
+        string apiResponse = await response.Content.ReadAsStringAsync();
+
+        JObject json = JObject.Parse(apiResponse);
+        JToken data = json["data"];
+
+        materials = data.ToObject<List<Material>>();
+    }
+
+    private async Task LoadFormats()
+    {
+        HttpResponseMessage response = await httpClient.GetAsync($"https://localhost:7101/api/format");
+        string apiResponse = await response.Content.ReadAsStringAsync();
+
+        JObject json = JObject.Parse(apiResponse);
+        JToken data = json["data"];
+
+        formats = data.ToObject<List<Format>>();
+    }
+
+    private async Task Submit()
+    {
+        work.TypeWorkId = selectedTypeWork;
+        work.MaterialId = selectedMaterial;
+        work.FormatId = selectedFormat;
+
+        HttpResponseMessage response = await httpClient.PutAsJsonAsync($"{httpClient.BaseAddress}/{work.Id}", work);
+        string apiResponse = await response.Content.ReadAsStringAsync();
+
+        JObject json = JObject.Parse(apiResponse);
+        JToken data = json["data"];
+
+        work = data.ToObject<Work>();
+
+        navigationManager.NavigateTo("GetWorks");
+    }
+}
