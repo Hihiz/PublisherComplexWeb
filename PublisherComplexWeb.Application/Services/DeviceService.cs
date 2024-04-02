@@ -1,10 +1,8 @@
 ﻿using AutoMapper;
 using PublisherComplexWeb.Application.Common.Exceptions;
 using PublisherComplexWeb.Application.Dto.Device;
-using PublisherComplexWeb.Application.Dto.Format;
 using PublisherComplexWeb.Application.Interfaces;
 using PublisherComplexWeb.Application.Models;
-using PublisherComplexWeb.Application.Validations;
 using PublisherComplexWeb.Domain.Entities;
 using PublisherComplexWeb.Domain.Enums;
 
@@ -29,8 +27,7 @@ namespace PublisherComplexWeb.Application.Services
 
                 return new StatusResponse<List<DeviceDto>>()
                 {
-                    StatusCode = (int)ErrorCode.OK,
-                    Data = devicesDto
+                    StatusCode = (int)ErrorCode.OK
                 };
             }
             catch (Exception ex)
@@ -73,8 +70,7 @@ namespace PublisherComplexWeb.Application.Services
                 Console.WriteLine(ex.Message);
 
                 return new StatusResponseError<DeviceDto>()
-                {
-                    StatusCode = (int)ErrorCode.NotFound,
+                {                   
                     Message = ErrorCode.NotFound.ToString()
                 };
             }
@@ -106,8 +102,7 @@ namespace PublisherComplexWeb.Application.Services
                     };
                 }
 
-                await _repository.Create(device);
-                await _repository.SaveChangesAsync();
+                 _repository.Create(device);
 
                 DeviceDto deviceDto = _mapper.Map<DeviceDto>(device);
 
@@ -157,8 +152,6 @@ namespace PublisherComplexWeb.Application.Services
 
                 await _repository.Update(device);
                 await _repository.SaveChangesAsync();
-
-                DeviceDto deviceDto = _mapper.Map<DeviceDto>(device);
 
                 return new StatusResponse<DeviceDto>
                 {
