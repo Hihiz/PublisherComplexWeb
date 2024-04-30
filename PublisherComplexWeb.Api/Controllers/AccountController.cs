@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PublisherComplexWeb.Application.Dto.User;
-using PublisherComplexWeb.Application.Interfaces;
+using PublisherComplexWeb.Application.Interfaces.Services;
 using PublisherComplexWeb.Infrastructure.Interfaces;
 using PublisherComplexWeb.Infrastructure.Models;
 
