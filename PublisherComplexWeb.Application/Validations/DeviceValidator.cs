@@ -11,9 +11,9 @@ namespace PublisherComplexWeb.Application.Validations
 
         public DeviceValidator(IBaseRepository<Device> repository) => _repository = repository;
 
-        public async Task<IBaseStatus> Validate(Device entity)
+        public async Task<IBaseStatus> Validate(Device entity, CancellationToken cancellationToken)
         {
-            Device result = (await _repository.GetAll()).FirstOrDefault(d => d.Title == entity.Title);
+            Device result = (await _repository.GetAll(cancellationToken)).FirstOrDefault(d => d.Title == entity.Title);
 
             if (result != null)
             {

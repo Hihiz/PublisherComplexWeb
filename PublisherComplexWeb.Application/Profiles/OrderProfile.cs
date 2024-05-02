@@ -11,6 +11,7 @@ namespace PublisherComplexWeb.Application.Profiles
             CreateMap<Order, OrderDto>().ReverseMap();
             CreateMap<Order, CreateOrderDto>().ReverseMap();
             CreateMap<Order, UpdateOrderDto>().ReverseMap();
+            CreateMap<DetailOrderDto, Order>().ReverseMap();
         }
     }
 }
