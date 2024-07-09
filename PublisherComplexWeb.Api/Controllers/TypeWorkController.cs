@@ -1,9 +1,6 @@
-﻿using FluentValidation.Results;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using PublisherComplexWeb.Application.Dto.TypeWork;
-using PublisherComplexWeb.Application.Interfaces;
-using PublisherComplexWeb.Application.Validations.FluentValidations.TypeWork;
+﻿using PublisherComplexWeb.Application.Dto.TypeWork;
+using PublisherComplexWeb.Application.Interfaces.Services;
+
 
 namespace PublisherComplexWeb.Api.Controllers
 {
@@ -11,58 +8,11 @@ namespace PublisherComplexWeb.Api.Controllers
     [ApiController]
     public class TypeWorkController : ControllerBase
     {
-        private readonly ITypeWorkService _typeWorkService;
+        private readonly IBaseService<TypeWorkDto, CreateTypeWorkDto, UpdateTypeWorkDto> _typeWorkService;
 
-        public TypeWorkController(ITypeWorkService materialService) => _typeWorkService = materialService;
+        public TypeWorkController(IBaseService<TypeWorkDto, CreateTypeWorkDto, UpdateTypeWorkDto> materialService) => _typeWorkService = materialService;
 
         [HttpGet]
-        public async Task<ActionResult> GetTypeWorks() => Ok(await _typeWorkService.GetAll());
-
-        [HttpGet("{id}")]
-        public async Task<ActionResult> GetTypeWork(int id) => Ok(await _typeWorkService.GetById(id));
-
-        //[Authorize(Roles = "Member, Admin")]
-        [Authorize]
-        [HttpPost]
-        public async Task<ActionResult> CreateTypeWork(CreateTypeWorkDto dto)
-        {
-            CreateTypeWorkValidator validators = new CreateTypeWorkValidator();
-
-            ValidationResult result = validators.Validate(dto);
-
-            if (!result.IsValid)
-            {
-                return BadRequest(string.Join('\n', result.Errors));
-            }
-
-            return Ok(await _typeWorkService.CreateTypeWork(dto));
-        }
-
-        //[Authorize(Roles = "Member, Admin")]
-        [Authorize]
-        [HttpPut("{id}")]
-        public async Task<ActionResult> UpdateTypeWork(int id, UpdateTypeWorkDto dto)
-        {
-            UpdateTypeWorkValidator validators = new UpdateTypeWorkValidator();
-
-            ValidationResult result = validators.Validate(dto);
-
-            if (!result.IsValid)
-            {
-                return BadRequest(string.Join('\n', result.Errors));
-            }
-
-            return Ok(await _typeWorkService.UpdateTypeWork(id, dto));
-        }
-
-        //[Authorize(Roles = "Admin")]
-        [Authorize]
-        [HttpDelete("{id}")]
-        public async Task<ActionResult> DeleteTypeWork(int id)
-        {
-            await _typeWorkService.DeleteTypeWork(id);
-
-            return Ok(id);
-        }
+        public async Task<ActionResult> GetTypeWorks() => Ok(await _typeWorkService.GetAll());       
     }
 }
