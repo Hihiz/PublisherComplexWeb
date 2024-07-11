@@ -8,10 +8,17 @@ namespace PublisherComplexWeb.Application.Profiles
     {
         public WorkProfile()
         {
-            CreateMap<Work, WorkDto>().ReverseMap();
+            CreateMap<Work, WorkDto>()
+                .ForMember(dest =>
+                    dest.DeviceId,
+                    opt => opt.MapFrom(src => src.Material.Device.Id))
+                .ForMember(dest =>
+                    dest.DeviceTitle,
+                    opt => opt.MapFrom(src => src.Material.Device.Title))
+                .ReverseMap();
+
             CreateMap<Work, CreateWorkDto>().ReverseMap();
-            CreateMap<Work, UpdateWorkDto>().ReverseMap();
-            CreateMap<Work, WorkCollectionDto>().ReverseMap();
+            CreateMap<Work, UpdateWorkDto>().ReverseMap();       
         }
     }
 }
