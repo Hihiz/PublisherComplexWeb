@@ -1,52 +1,21 @@
 ﻿@page "/CreateDevice"
 
-@attribute [StreamRendering]
-@rendermode RenderMode.InteractiveServer
-
-@inject IHttpClientFactory clientFactory
-@inject NavigationManager navigationManager
-
-<PageTitle>Create Device</PageTitle>
-
 <h2>Создание устройства</h2>
  
 <table>
-    <div class="form-group">
-        <p>
-            <label class="control-label">Title</label>
-            <input class="form-control" @bind-value="device.Title" />
-        </p>
-
-        <p>
-            <button class="btn btn-success" @onclick="Submit">Сохранить</button>
-        </p>
-    </div>
+    
 </table>
 
 @code {
-    private HttpClient httpClient = null;
-
     private Device device = new Device();
-
-    [Parameter]
-    public string Id { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
-        httpClient = clientFactory.CreateClient();
-        httpClient.BaseAddress = new Uri("https://localhost:7101/api/device");
+     
     }
 
     private async Task Submit()
-    {
-        HttpResponseMessage response = await httpClient.PostAsJsonAsync($"{httpClient.BaseAddress}", device);
-        string apiResponse = await response.Content.ReadAsStringAsync();
-
-        JObject json = JObject.Parse(apiResponse);
-        JToken data = json["data"];
-
-        device = data.ToObject<Device>();
-
+    {    
         navigationManager.NavigateTo("GetDevices");
     }
 }
