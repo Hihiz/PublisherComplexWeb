@@ -7,15 +7,9 @@
   </PropertyGroup>
 
   <ItemGroup>
- 
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.2" />
   </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\PublisherComplexWeb.Application\PublisherComplexWeb.Application.csproj" />
-  </ItemGroup>
-
 </Project>
