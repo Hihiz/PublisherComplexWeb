@@ -9,6 +9,9 @@
 * PostgreSql
 * CQRS + MediatR
 * Fluent Validation
+* xUnit - test
+* Docker
+* gRPC
 
 ## Схема бд
 ![image](https://github.com/Hihiz/PublisherComplexWeb/assets/98191494/218bd822-b42e-4a10-8ae7-ab20b80b5ec4)
